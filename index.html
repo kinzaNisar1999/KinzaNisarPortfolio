@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinza Nisar | Game Developer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- VARIABLES --- */
+        :root {
+            --text-main: #2d3436;
+            --text-light: #636e72;
+            --accent: #0984e3;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --font-main: 'Poppins', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            color: var(--text-main);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background: #f0f2f5;
+        }
+
+        /* --- ANIMATED BACKGROUND --- */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: #fdfbfb;
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 10s infinite alternate ease-in-out;
+            border-radius: 50%;
+        }
+
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #a29bfe; animation-delay: 0s; }
+        .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #74b9ff; animation-delay: 2s; }
+        .blob-3 { top: 40%; left: 40%; width: 400px; height: 400px; background: #81ecec; animation-delay: 4s; opacity: 0.4; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(20px, 40px) scale(1.1); }
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+        }
+
+        .nav-logo {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--text-main);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links { display: flex; gap: 30px; list-style: none; }
+        .nav-links a { color: var(--text-light); text-decoration: none; font-weight: 500; transition: 0.3s; font-size: 0.95rem; }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* --- HERO --- */
+        .hero {
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-content h1 { font-size: 4rem; color: var(--text-main); margin-bottom: 5px; font-weight: 700; letter-spacing: -1px; }
+        .hero-content h2 { font-size: 1.5rem; color: var(--accent); font-weight: 500; margin-bottom: 25px; min-height: 1.6em; }
+        .typing-text::after { content: '|'; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .hero-content p { max-width: 600px; margin: 0 auto 35px; color: var(--text-light); font-size: 1.15rem; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0984e3, #74b9ff);
+            color: white; padding: 14px 35px; border-radius: 50px; text-decoration: none;
+            font-weight: 600; box-shadow: 0 10px 20px rgba(9, 132, 227, 0.3); transition: 0.3s; display: inline-block;
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(9, 132, 227, 0.4); }
+
+        /* --- SECTIONS --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 30px; }
+        section { padding: 100px 0; }
+        .section-title { text-align: center; font-size: 2.2rem; margin-bottom: 60px; color: var(--text-main); }
+
+        /* --- CARDS --- */
+        .glass-card {
+            background: var(--card-bg); backdrop-filter: blur(10px); border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: var(--shadow); padding: 30px; margin-bottom: 20px;
+        }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+        .info-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .role { color: var(--accent); font-weight: 600; font-size: 0.95rem; margin-bottom: 10px; display: block; }
+        
+        .skills-wrap span {
+            display: inline-block; background: white; color: var(--accent); padding: 8px 16px;
+            border-radius: 8px; margin: 0 8px 10px 0; font-size: 0.9rem; font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #eee;
+        }
+
+        /* --- PROJECTS --- */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .project-card {
+            background: rgba(255, 255, 255, 0.95); border-radius: 16px; overflow: hidden;
+            box-shadow: var(--shadow); transition: 0.4s; cursor: pointer; border: 1px solid rgba(255,255,255,0.8);
+        }
+        .project-card:hover { transform: translateY(-10px); }
+
+        /* MEDIA CONTAINERS */
+        .card-media-video {
+            height: 180px; width: 100%; overflow: hidden; position: relative; background-color: #000;
+        }
+        .card-media-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .card-body { padding: 25px; }
+        .card-body h3 { margin-bottom: 8px; font-size: 1.3rem; }
+        .card-body p { color: var(--text-light); font-size: 0.95rem; margin-bottom: 20px; line-height: 1.5; }
+        .card-tags { font-size: 0.75rem; color: var(--accent); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;}
+        .badge { display: inline-block; font-size: 0.7rem; padding: 2px 8px; border-radius: 4px; background: #e1ecf4; color: #2c3e50; margin-left: 10px; vertical-align: middle; }
+
+        /* --- CONTACT & FOOTER --- */
+        .contact-box {
+            background: linear-gradient(135deg, #fff, #f8f9fa); padding: 50px; border-radius: 20px;
+            box-shadow: var(--shadow); text-align: center; max-width: 700px; margin: 0 auto;
+        }
+        footer { text-align: center; padding: 40px; color: var(--text-light); font-size: 0.9rem; }
+
+        /* --- MODAL --- */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 2000; overflow-y: auto; backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            background: #fff; margin: 5% auto; width: 90%; max-width: 800px; padding: 40px;
+            border-radius: 16px; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        .close-btn { position: absolute; top: 20px; right: 25px; font-size: 1.8rem; cursor: pointer; color: var(--text-main); transition: 0.3s; }
+        .close-btn:hover { color: var(--accent); transform: rotate(90deg); }
+        .modal h2 { color: var(--accent); margin-bottom: 5px; }
+        .modal h3 { font-size: 1.1rem; margin-top: 25px; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px; color: var(--text-main); }
+        .modal ul { margin-left: 20px; color: var(--text-light); margin-bottom: 10px; }
+        .modal li { margin-bottom: 8px; }
+
+        /* VIDEO LINK CARD */
+        .video-link-card {
+            display: flex; align-items: center; justify-content: center; gap: 15px; background: #f8f9fa; 
+            color: #2d3436; padding: 20px; border-radius: 12px; text-decoration: none; font-weight: 600; 
+            font-size: 1rem; transition: all 0.3s ease; border: 1px solid #e1e4e8; margin-bottom: 25px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .video-link-card:hover { background: #ffffff; transform: translateY(-3px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); border-color: #d1d5db; }
+        .video-link-card i { color: #ff0000; font-size: 1.8rem; }
+        
+        /* IMAGE SLIDER (GALLERY) */
+        .screenshot-gallery {
+            display: flex; gap: 15px; overflow-x: auto; padding-bottom: 15px; margin-top: 25px; margin-bottom: 25px;
+            border-top: 1px solid #eee; padding-top: 20px; 
+            scroll-snap-type: x mandatory; /* Makes it slide and snap like a carousel */
+            scrollbar-width: thin; scrollbar-color: var(--accent) #eee;
+        }
+        .screenshot-gallery::-webkit-scrollbar { height: 8px; }
+        .screenshot-gallery::-webkit-scrollbar-track { background: #f1f1f1; }
+        .screenshot-gallery::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+        
+        .screenshot-gallery img { 
+            height: 220px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            flex-shrink: 0; 
+            cursor: pointer; 
+            scroll-snap-align: start; /* Snap alignment */
+            transition: transform 0.3s ease; 
+        }
+        .screenshot-gallery img:hover { transform: scale(1.02); }
+
+        .modal-links { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 10px; }
+        .modal-btn {
+            display: inline-flex; align-items: center; background: var(--accent); color: #fff; padding: 10px 20px; 
+            border-radius: 8px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 10px rgba(9, 132, 227, 0.3);
+            transition: 0.3s; font-size: 0.9rem;
+        }
+        .modal-btn:hover { background: #0070c0; transform: translateY(-2px); }
+
+        @media (max-width: 768px) {
+            .about-grid { grid-template-columns: 1fr; }
+            .hero-content h1 { font-size: 2.5rem; }
+            nav { padding: 0 20px; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="background-animation">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav>
+        <a href="#" class="nav-logo">Kinza Nisar</a>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Kinza Nisar</h1>
+            <h2><span class="typing-text" id="typewriter"></span></h2>
+            <p>
+                Specializing in simulation mechanics, physics-based gameplay, and mobile optimization.
+                Creator of titles with over 1 Million+ active players.
+            </p>
+            <a href="#projects" class="btn-primary">View Portfolio</a>
+        </div>
+    </header>
+
+    <section id="about" class="container">
+        <h2 class="section-title">About Me</h2>
+        
+        <div class="about-grid">
+            <div class="glass-card">
+                <p style="margin-bottom: 20px; color: #555;">
+                    I am a passionate Game Developer with a Computer Science degree from <strong>UET Taxila (Bronze Medalist)</strong>. 
+                    I have strong experience in Unity 3D, working on commercial titles at studios like Apex Logics and Spunk Studio.
+                </p>
+                <p style="margin-bottom: 30px; color: #555;">
+                    I focus on building realistic simulation systems, optimizing games for mobile performance, and exploring new game technologies.
+                </p>
+                
+                <h3>Technical Skills</h3>
+                <div class="skills-wrap" style="margin-top: 15px;">
+                    <span>Unity 3D</span>
+                    <span>C#</span>
+                    <span>RCC Controller</span>
+                    <span>Firebase</span>
+                    <span>Mediation</span>
+                    <span>Git</span>
+                    <span>Python</span>
+                    <span>Daz 3D</span>
+                </div>
+            </div>
+
+            <div>
+                <div class="glass-card">
+                    <div class="info-header"><h3>Unity Developer</h3><span class="date">Sep 2022 - May 2024</span></div>
+                    <div class="role">Apex Logics</div>
+                    <ul>
+                        <li>Developed <strong>Bus Simulator</strong> (1M+ downloads).</li>
+                        <li>Implemented IAP, Ads, and Analytics.</li>
+                        <li>Employee of the Month (Jan 2023).</li>
+                    </ul>
+                </div>
+
+                <div class="glass-card">
+                    <div class="info-header"><h3>Unity Developer</h3><span class="date">Jun 2022 - Sep 2022</span></div>
+                    <div class="role">Spunk Studio</div>
+                    <ul>
+                        <li>Worked on RFPS Shooter & Hill Racing mechanics.</li>
+                        <li>Collaborated on UI/UX flow.</li>
+                    </ul>
+                </div>
+
+                <div class="glass-card">
+                    <div class="info-header"><h3>BS Computer Science</h3><span class="date">2017 - 2021</span></div>
+                    <div class="role">UET Taxila</div>
+                    <ul>
+                        <li><strong>Bronze Medalist</strong> (3.70 CGPA).</li>
+                        <li>Final Year Project: 3D Animated Short.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects">
+        <div class="container">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="projects-grid">
+
+                <div class="project-card" onclick="openModal('bus-modal')">
+                    <div class="card-media-video">
+                        <video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:contain; background:#000;">
+                            <source src="bus-gameplay.mp4" type="video/mp4">
+                            <img src="Images/bus-1.jpg" style="width:100%; height:100%; object-fit:contain; background:#000;">
+                        </video>
+                    </div>
+                    <div class="card-body">
+                        <h3>Bus Simulator</h3>
+                        <p>Mobile simulation game with 5 modes and 1M+ downloads.</p>
+                        <div class="card-tags">UNITY • C# • IAP</div>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('fyp-modal')">
+                    <div class="card-media-video">
+                        <video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:contain; background:#000;">
+                            <source src="Animated Movie FYP.mp4" type="video/mp4">
+                            <img src="Images/fyp-1.jpg" style="width:100%; height:100%; object-fit:contain; background:#000;">
+                        </video>
+                    </div>
+                    <div class="card-body">
+                        <h3>3D Animated Movie</h3>
+                        <p>Cinematic story produced using Unity URP and Daz 3D.</p>
+                        <div class="card-tags">URP • DAZ 3D • ANIMATION</div>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('truck-modal')">
+                    <div class="card-media-video">
+                        <video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:contain; background:#000;">
+                            <source src="truck-gameplay.mp4" type="video/mp4">
+                            <img src="Images/truck-1.jpg" style="width:100%; height:100%; object-fit:contain; background:#000;">
+                        </video>
+                    </div>
+                    <div class="card-body">
+                        <h3>Heavy Truck USA</h3>
+                        <p>Physics-based simulation for heavy cargo transport.</p>
+                        <div class="card-tags">PHYSICS • OPTIMIZATION</div>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('airplane-modal')">
+                    <div class="card-media-video">
+                        <video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:contain; background:#000;">
+                            <source src="airplane-gameplay.mp4" type="video/mp4">
+                            <img src="Images/airplane-1.jpg" style="width:100%; height:100%; object-fit:contain; background:#000;">
+                        </video>
+                    </div>
+                    <div class="card-body">
+                        <h3>Airplane Simulator</h3>
+                        <p>Flight pilot simulation featuring realistic controls.</p>
+                        <div class="card-tags">AERODYNAMICS • CONTROLS</div>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('hexa-modal')">
+                    <div class="card-media-video">
+                        <video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:contain; background:#000;">
+                            <source src="hexa-gameplay.mp4" type="video/mp4">
+                            <img src="Images/hexa-1.jpg" style="width:100%; height:100%; object-fit:contain; background:#000;" alt="Hexa Sort">
+                        </video>
+                    </div>
+                    <div class="card-body">
+                        <h3>Hexa Sort Puzzle <span class="badge">PROTOTYPE</span></h3>
+                        <p>Sorting algorithm puzzle featuring stack mechanics.</p>
+                        <div class="card-tags">ALGORITHM • SORTING</div>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('jig-modal')">
+                    <div class="card-media-video">
+                        <video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:contain; background:#000;">
+                            <source src="jigmerge-gameplay.mp4" type="video/mp4">
+                            <img src="Images/jig-1.jpg" style="width:100%; height:100%; object-fit:contain; background:#000;" alt="Jigmerge">
+                        </video>
+                    </div>
+                    <div class="card-body">
+                        <h3>Jigmerge Puzzle <span class="badge">PROTOTYPE</span></h3>
+                        <p>Logic puzzle game combining jigsaw mechanics with merging.</p>
+                        <div class="card-tags">PUZZLE • MERGE LOGIC</div>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('z-modal')">
+                    <div class="card-media-video">
+                        <video autoplay loop muted playsinline style="width:100%; height:100%; object-fit:contain; background:#000;">
+                            <source src="Z Escape Gameplay.mp4" type="video/mp4">
+                            <img src="Images/z-1.jpg" style="width:100%; height:100%; object-fit:contain; background:#000;" alt="Z Escape">
+                        </video>
+                    </div>
+                    <div class="card-body">
+                        <h3>Z Escape Runner <span class="badge">PROTOTYPE</span></h3>
+                        <p>Fast-paced runner mechanics with crowd control systems.</p>
+                        <div class="card-tags">RUNNER • NAVMESH • AI</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="container">
+        <div class="contact-box">
+            <h2 class="section-title" style="margin-bottom: 20px;">Get In Touch</h2>
+            <p style="color: #666; margin-bottom: 30px; font-size: 1.1rem;">
+                I am currently looking for new opportunities in game development. 
+                Whether you have a question or just want to connect, I'd love to hear from you.
+            </p>
+            <a href="mailto:knisar608@gmail.com" class="btn-primary"><i class="fas fa-envelope" style="margin-right: 8px;"></i> Send Email</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Kinza Nisar. All Rights Reserved.</p>
+    </footer>
+
+    <div id="bus-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('bus-modal')">&times;</span>
+            <h2>Bus Simulator Game</h2>
+            <p style="color: var(--accent); font-weight: 600; margin-bottom: 10px;">Role: Lead Programmer & Level Designer</p>
+
+            <a href="https://www.youtube.com/playlist?list=PLCY9GxmprOgd2gia9X5Ce430sY4tilEkv" target="_blank" class="video-link-card">
+                <i class="fab fa-youtube"></i>
+                <span>Watch Gameplay Playlist</span>
+            </a>
+
+            <h3 style="margin-top:0;">Gameplay Gallery</h3>
+            <div class="screenshot-gallery">
+                <img src="Images/bus-1.jpg" alt="Bus 1">
+                <img src="Images/bus-2.jpg" alt="Bus 2">
+                <img src="Images/bus-3.jpg" alt="Bus 3">
+                <img src="Images/bus-4.jpg" alt="Bus 4">
+                <img src="Images/bus-5.jpg" alt="Bus 5">
+            </div>
+
+            <h3>1. Project Overview</h3>
+            <p>I developed the entire codebase and level design for this commercial simulation game. The game features <strong>5 distinct modes</strong> (Career, Free Mode, Parking, Racing, and Challenge). I handled all programming, UI implementation, back-end integration, and optimization.</p>
+
+            <h3>2. Key Technical Contributions</h3>
+            <ul>
+                <li><strong>Core Gameplay:</strong> Implemented vehicle physics using <strong>RCC (Realistic Car Controller)</strong>, fine-tuning suspension, torque, and handling for different vehicle types (Buses vs. Heavy Trucks).</li>
+                <li><strong>AI System:</strong> Integrated RCC AI for the Racing Mode to create competitive enemy vehicles with overtaking and braking logic.</li>
+                <li><strong>Level Design:</strong> Designed and built <strong>20+ levels</strong> with varying environments, ensuring proper difficulty progression and terrain flow.</li>
+                <li><strong>UI Architecture:</strong> Wired the entire UI flow (Main Menu, Garage, HUD, Pause, Game Over) and connected it to the game logic.</li>
+                <li><strong>Backend & Monetization:</strong> Integrated <strong>Firebase Analytics</strong> to track user retention and <strong>AdMob Mediation</strong> for revenue.</li>
+            </ul>
+
+            <h3>3. Challenges & Solutions</h3>
+            <ul>
+                <li><strong>Scalable Cutscenes:</strong> Creating unique passenger pick-up/drop-off animations for 20 levels was inefficient. I engineered a <strong>Generalized Cutscene Script</strong> that automatically handled character instantiation, movement, and boarding logic based on assigned waypoints.</li>
+                <li><strong>Heavy Truck Physics:</strong> The new truck update with oversized tires caused flipping. I wrote a custom controller extension to override the center of mass and adjust suspension spring/damper rates dynamically based on speed.</li>
+                <li><strong>Mobile Optimization:</strong> Addressed low FPS on older devices by implementing Occlusion Culling, baking lighting maps, and using texture compression to reduce memory footprint.</li>
+            </ul>
+
+            <div class="modal-links">
+                <a href="https://play.google.com/store/apps/details?id=com.apex.city.bus.simulator.games&hl=en" target="_blank" class="modal-btn">View on Play Store</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="fyp-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('fyp-modal')">&times;</span>
+            <h2>3D Animated Movie (FYP)</h2>
+            <p style="color: var(--accent); font-weight: 600; margin-bottom: 20px;">Role: Technical Artist</p>
+            
+            <a href="https://www.youtube.com/watch?v=BBpMBNelzNs" target="_blank" class="video-link-card">
+                <i class="fab fa-youtube"></i>
+                <span>Watch Full Movie</span>
+            </a>
+
+            <h3 style="margin-top:0;">Visuals</h3>
+            <div class="screenshot-gallery">
+                <img src="Images/fyp-1.jpg" alt="FYP 1">
+                <img src="Images/fyp-2.jpg" alt="FYP 2">
+                <img src="Images/fyp-3.jpg" alt="FYP 3">
+                <img src="Images/fyp-4.jpg" alt="FYP 4">
+                <img src="Images/fyp-5.jpg" alt="FYP 5">
+            </div>
+
+            <h3>1. Technical Pipeline Overview</h3>
+            <p>For my Final Year Project (Grade A), I co-produced a complete story-driven short film. Instead of traditional pre-rendering, we utilized <strong>Unity's Universal Render Pipeline (URP)</strong> to achieve near-real-time cinematic fidelity. My primary focus was establishing a robust character and asset pipeline between Daz 3D, Blender, and Unity.</p>
+
+            <h3>2. Key Technical Contributions</h3>
+            <ul>
+                <li><strong>Character Pipeline:</strong> Engineered a workflow using <strong>Daz 3D</strong> to generate age-variant morphs (Child vs. Adult) while maintaining consistent facial identity.</li>
+                <li><strong>Cloth Simulation:</strong> Designed custom outfits in <strong>Marvelous Designer</strong>, simulating realistic fabric physics, and optimized mesh weights in Blender before Unity import.</li>
+                <li><strong>Environment & Lighting:</strong> Constructed immersive scenes in <strong>Unity URP</strong>, utilizing a mix of baked lightmaps for static geometry and real-time lighting for characters.</li>
+                <li><strong>Audio-Visual Sync:</strong> Manually synchronized voice-overs with facial animations directly within the Unity Timeline for precise lip-sync.</li>
+            </ul>
+
+             <h3>3. Challenges & Solutions</h3>
+            <ul>
+                <li><strong>Facial Animation:</strong> Lacking paid motion capture tools, I developed a manual workflow using Unity Timeline to break down audio into phonemes and keyframe facial blendshapes.</li>
+                <li><strong>Cloth Clipping:</strong> High-fidelity clothes clipped during fast movements. I created a cleanup workflow in Blender to bake physics simulations into animation frames before import.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="truck-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('truck-modal')">&times;</span>
+            <h2>Heavy Truck USA</h2>
+            <p style="color: var(--accent); font-weight: 600; margin-bottom: 10px;">Role: Unity Developer</p>
+
+            <h3 style="margin-top:0;">Gameplay Gallery</h3>
+            <div class="screenshot-gallery">
+                <img src="Images/truck-1.jpg" alt="Truck 1">
+                <img src="Images/truck-2.jpg" alt="Truck 2">
+                <img src="Images/truck-3.jpg" alt="Truck 3">
+                <img src="Images/truck-4.jpg" alt="Truck 4">
+                <img src="Images/truck-5.jpg" alt="Truck 5">
+            </div>
+
+            <h3>1. Project Overview</h3>
+            <p>I served as a core developer for this heavy cargo simulation game, designing specialized game modes that required unique handling logic. My primary focus was on vehicle physics stability for heavy loads (10+ tons) and dynamic terrain traversal.</p>
+
+            <h3>2. Key Mechanic: Trailer Hitching System</h3>
+            <p>I engineered a physics-based coupling system where the truck must manually align with the trailer's kingpin. Upon connection, a <strong>ConfigurableJoint</strong> is instantiated to link the rigidbodies, and the truck's mass/drag values are dynamically updated to simulate the massive added load.</p>
+
+            <h3>3. Key Feature: Animal Transportation Mode</h3>
+            <ul>
+                <li><strong>Live Cargo Logic:</strong> Designed a unique mode where players transport livestock. I implemented logic where rough driving (sudden braking/turning) agitates the animals, causing a score penalty or fail state.</li>
+                <li><strong>Vehicle Physics:</strong> Adjusted suspension stiffness specifically for this mode to handle the shifting center of mass from moving live cargo.</li>
+            </ul>
+            
+            <h3>4. Optimization</h3>
+             <ul>
+                <li><strong>Terrain:</strong> Optimized large-scale terrain rendering using Terrain Chunking and LOD systems.</li>
+                <li><strong>Scene Streaming:</strong> Implemented Additive Loading to load map sectors asynchronously, reducing memory usage on low-end devices.</li>
+            </ul>
+
+            <div class="modal-links">
+                <a href="https://play.google.com/store/apps/details?id=com.xtreme.heavy.truck.simulator.usa" target="_blank" class="modal-btn">View on Play Store</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="airplane-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('airplane-modal')">&times;</span>
+            <h2>Airplane Simulator</h2>
+            
+            <div class="screenshot-gallery">
+                <img src="Images/airplane-1.jpg" alt="Air 1"><img src="Images/airplane-2.jpg" alt="Air 2"><img src="Images/airplane-3.jpg" alt="Air 3"><img src="Images/airplane-4.jpg" alt="Air 4"><img src="Images/airplane-5.jpg" alt="Air 5">
+            </div>
+
+            <h3>Overview</h3>
+            <p>Flight simulation game with complex controls for takeoff and landing. Implemented checkpoint logic and aerial physics.</p>
+            <div class="modal-links"><a href="https://play.google.com/store/apps/details?id=com.xtreme.flight.pilot.simulator.ultimate" target="_blank" class="modal-btn">View on Play Store</a></div>
+        </div>
+    </div>
+
+    <div id="hexa-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('hexa-modal')">&times;</span>
+            <h2>Hexa Sort Puzzle</h2>
+            <div class="screenshot-gallery">
+                <img src="Images/hexa-1.jpg" alt="H1"><img src="Images/hexa-2.jpg" alt="H2"><img src="Images/hexa-3.jpg" alt="H3"><img src="Images/hexa-4.jpg" alt="H4"><img src="Images/hexa-5.jpg" alt="H5">
+            </div>
+            <h3>Project Mechanics</h3>
+            <p>This project focused on implementing complex sorting algorithms within a visual grid system. The core mechanic involves managing stacks of hexagonal tiles that automatically merge when color-matched adjacent stacks are placed.</p>
+            <h3>Technical Learnings</h3>
+            <ul>
+                <li>Implemented a hexagonal coordinate system for precise grid snapping.</li>
+                <li>Developed stack management algorithms to handle dynamic sorting and merging.</li>
+                <li>Used object pooling for efficient tile instantiation and destruction.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="jig-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('jig-modal')">&times;</span>
+            <h2>Jigmerge Puzzle</h2>
+            <div class="screenshot-gallery">
+                <img src="Images/jig-1.jpg" alt="J1"><img src="Images/jig-2.jpg" alt="J2"><img src="Images/jig-3.jpg" alt="J3"><img src="Images/jig-4.jpg" alt="J4"><img src="Images/jig-5.jpg" alt="J5">
+            </div>
+            <h3>Project Mechanics</h3>
+            <p>A hybrid puzzle game that combines traditional jigsaw piece fitting with a merge mechanic. Players drag pieces onto a board where valid placements lock in, and identical adjacent pieces merge to upgrade.</p>
+            <h3>Technical Learnings</h3>
+            <ul>
+                <li>Implemented 2D drag-and-drop systems with raycasting.</li>
+                <li>Created a shape-detection algorithm to validate placement on irregular grids.</li>
+                <li>Managed game state for merging logic and progression systems.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="z-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('z-modal')">&times;</span>
+            <h2>Z Escape Runner</h2>
+            <div class="screenshot-gallery">
+                <img src="Images/z-1.jpg" alt="Z1"><img src="Images/z-2.jpg" alt="Z2"><img src="Images/z-3.jpg" alt="Z3"><img src="Images/z-4.jpg" alt="Z4"><img src="Images/z-5.jpg" alt="Z5">
+            </div>
+            <h3>Project Mechanics</h3>
+            <p>A fast-paced crowd runner where the player leads a group of survivors escaping enemies. The focus was on handling large numbers of moving agents efficiently while maintaining high performance.</p>
+            <h3>Technical Learnings</h3>
+            <ul>
+                <li>Utilized Unity NavMesh for intelligent agent pathfinding and obstacle avoidance.</li>
+                <li>Optimized crowd simulation to handle 50+ simultaneous agents without lag.</li>
+                <li>Implemented state machines for crowd behaviors (Running, Idle, Climbing, Falling).</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Modal Scripts
+        function openModal(id) { document.getElementById(id).style.display = "block"; document.body.style.overflow = "hidden"; }
+        function closeModal(id) { document.getElementById(id).style.display = "none"; document.body.style.overflow = "auto"; }
+        window.onclick = function(e) { if (e.target.classList.contains('modal')) { e.target.style.display = "none"; document.body.style.overflow = "auto"; }}
+
+        // Typewriter Effect
+        const textElement = document.getElementById("typewriter");
+        const texts = ["Unity Game Developer", "Simulation Specialist", "Computer Scientist"];
+        let count = 0;
+        let index = 0;
+        let currentText = "";
+        let letter = "";
+
+        (function type() {
+            if (count === texts.length) { count = 0; }
+            currentText = texts[count];
+            letter = currentText.slice(0, ++index);
+            textElement.textContent = letter;
+            if (letter.length === currentText.length) { setTimeout(() => { count++; index = 0; }, 2000); }
+            setTimeout(type, 100);
+        })();
+    </script>
+</body>
+</html>
